@@ -1,0 +1,140 @@
+@import "tailwindcss";
+
+/*
+ * 全站共用一条「三档语义刻度」（见 lib/theme.ts）：
+ *   落定（青碧）/ 中间态（琥珀）/ 否定（红）
+ * 新页面往这三档上靠，别再造第四种配色。
+ *
+ * 纸面用近白而不是奶油色 —— 后者是生成式设计的头号特征。
+ */
+:root {
+  --paper: #fcfcfb;
+  --ink: #14161a;
+  --muted: #6a707c;
+  --rule: #e3e5e9;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  /* 手机上有输入框时不要因为字号 <16px 触发 iOS 自动放大 */
+  -webkit-text-size-adjust: 100%;
+}
+
+/* 标识符、路径、时间戳用等宽 —— 它们需要逐字辨认，不是为了「科技感」 */
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/*
+ * header 的响应式。
+ *
+ * 需求确认会：「手机上用得不少。」实测 375px 下，logo + 4 个导航项 + 数据库徽章
+ * 挤在一行会**横向溢出 39px**（撑破的是 antd Menu 的 item）——
+ * 而横向溢出会让整个页面能左右拖，是最容易察觉的一类布局问题。
+ *
+ * 所以窄屏下让 header 折成两行：第一行 logo + 徽章，第二行导航占满整行。
+ * 不用 antd 的 Menu overflow 折叠，因为折起来之后那 4 个入口就藏进「…」里了，
+ * 而它们正是这个站仅有的几个入口。
+ */
+.lc-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-inline: 16px;
+  background: #fff;
+  border-bottom: 1px solid var(--rule);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  flex-wrap: wrap;
+  /*
+   * ⚠️ 必须覆盖 antd Layout.Header 的 `line-height: 64px`。
+   *
+   * 那个行高是给纯文本做垂直居中的，但对里面塞了 inline SVG 的 flex 容器会失效：
+   * SVG 参与行盒计算、`vertical-align` 又把它推下去，整块被撑到 **80px** ——
+   * 比 header 的 64px 还高，于是图标和文字溢出到边框外（实测 logo.h=80 > header.h=64）。
+   *
+   * 另外用 min-height 而不是 height：flex-wrap 换行后要能长高，否则会被裁掉。
+   */
+  line-height: normal;
+  height: auto;
+  min-height: 56px;
+}
+
+.lc-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: inherit;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.lc-nav {
+  flex: 1 1 auto;
+  min-width: 0;
+  background: transparent;
+  border-bottom: none;
+}
+
+.lc-content {
+  padding: 16px;
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+  /* 手机上左右各 16px 太占地方，正文会被挤窄 */
+  box-sizing: border-box;
+}
+
+@media (max-width: 600px) {
+  .lc-content {
+    padding: 12px 12px 32px;
+  }
+
+  /* 观看历史的分页：375px 下「共 386 条」+ 页码 + 每页条数三样挤不下，
+     会折成三行、和下面的操作条叠在一起。
+     ⚠️ 这种问题**溢出检查量不出来** —— 文字换行了，scrollWidth == clientWidth。
+     所以窄屏直接把总数去掉（页码本身已经说明了位置）。 */
+  .lc-pager .ant-pagination-total-text {
+    display: none;
+  }
+  .lc-pager .ant-pagination {
+    margin: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .lc-header {
+    gap: 8px;
+    padding-inline: 12px;
+    padding-block: 4px;
+  }
+  /* 窄屏下把导航挤到第二行，占满整行 */
+  .lc-nav {
+    flex: 1 1 100%;
+    order: 3;
+    /* antd 的 horizontal Menu 在窄容器里仍按内容宽度排，允许它横向滚一下，
+       总比撑破页面好 —— 但正常 4 项在 375px 下放得下，这里只是保险 */
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  .lc-nav .ant-menu-item {
+    padding-inline: 10px;
+  }
+  /* 标题文字在窄屏收短，给徽章腾地方 */
+  .lc-logo-text {
+    display: none;
+  }
+}
+

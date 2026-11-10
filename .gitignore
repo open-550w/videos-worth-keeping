@@ -1,0 +1,35 @@
+# 依赖
+node_modules
+
+# 构建产物与运行产物（serve/dist/ 里的 uploads、任务日志也被这条覆盖）
+dist
+
+# 环境变量 —— 真凭据只写在 .env.local，永不提交
+.env*
+!.env.example
+
+# 运行期
+logs/
+.pids/
+*.log
+
+# 工具缓存
+*.tsbuildinfo
+
+# 抓取缓存（⚠️ 含 B 站的会话 cookie，是**活的登录凭据**；详情缓存也在这）
+.cache/
+
+# Claude Code 的本地权限授予（每个人不一样，不该进仓库）
+.claude/settings.local.json
+
+# macOS 元数据
+.DS_Store
+
+# Private application data and export outputs
+.data/
+*.sqlite
+*.sqlite-*
+.open-source/
+
+# Generated export marker
+.public-export

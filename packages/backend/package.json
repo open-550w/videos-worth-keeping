@@ -1,0 +1,37 @@
+{
+  "name": "@likes/backend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "scripts": {
+    "dev": "node ../../scripts/run.mjs dev",
+    "migrate": "node ../../scripts/run.mjs migrate",
+    "reset": "node ../../scripts/run.mjs reset",
+    "fetch:bili": "node ../../scripts/run.mjs fetch:bili",
+    "ping": "node ../../scripts/run.mjs ping",
+    "typecheck": "tsc --noEmit",
+    "backfill:bili-interactions": "node ../../scripts/run.mjs backfill:bili-interactions"
+  },
+  "dependencies": {
+    "@koa/cors": "^5.0.0",
+    "@koa/router": "^15.7.0",
+    "@likes/shared": "workspace:*",
+    "better-sqlite3": "^13.0.3",
+    "koa": "^3.2.1",
+    "koa-body": "^8.0.0",
+    "mysql2": "^3.11.5",
+    "pino": "^9.5.0",
+    "pino-pretty": "^11.3.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^9.6.0",
+    "@types/koa": "^3.0.3",
+    "@types/koa__cors": "^5.0.0",
+    "@types/koa__router": "^12.0.4",
+    "@types/node": "^20.19.43",
+    "tsx": "^4.23.1",
+    "typescript": "^5.9.3"
+  }
+}

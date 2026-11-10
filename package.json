@@ -1,0 +1,45 @@
+{
+  "name": "videos-worth-keeping",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "./scripts/local/start.sh",
+    "stop": "./scripts/local/stop.sh",
+    "status": "./scripts/local/status.sh",
+    "log": "./scripts/local/log.sh",
+    "dev": "pnpm --filter @likes/backend dev & pnpm --filter @likes/web dev",
+    "migrate": "pnpm --filter @likes/backend migrate",
+    "fetch:bili": "pnpm --filter @likes/backend fetch:bili",
+    "test": "pnpm test:shared && pnpm test:backend && pnpm test:web && pnpm test:runtime",
+    "test:shared": "tsx --test \"packages/shared/src/**/*.test.ts\"",
+    "test:backend": "tsx --test \"packages/backend/src/**/*.test.ts\"",
+    "test:web": "tsx --test \"packages/web/src/**/*.test.ts\"",
+    "typecheck": "pnpm -r typecheck",
+    "smoke": "node scripts/smoke/run.mjs",
+    "reset": "pnpm --filter @likes/backend reset -- --yes",
+    "smoke:clean": "pnpm reset && pnpm smoke",
+    "check-secrets": "./scripts/local/check-secrets.sh",
+    "backfill:bili-interactions": "pnpm --filter @likes/backend backfill:bili-interactions",
+    "test:integration": "tsx scripts/smoke/database.ts sqlite && tsx scripts/smoke/database.ts mysql",
+    "test:sqlite": "tsx scripts/smoke/database.ts sqlite",
+    "test:mysql": "tsx scripts/smoke/database.ts mysql",
+    "export:public": "node scripts/export-public.mjs",
+    "app:config": "node scripts/config.mjs",
+    "test:runtime": "node --test scripts/runtime.test.mjs"
+  },
+  "engines": {
+    "node": ">=22.12"
+  },
+  "packageManager": "pnpm@10.24.0",
+  "devDependencies": {
+    "@types/node": "^20.19.43",
+    "tsx": "^4.23.1",
+    "typescript": "^5.9.3"
+  },
+  "version": "0.1.0",
+  "description": "收藏值得留下的视频，导入哔哩哔哩观看历史并按观看日期回顾。",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/open-550w/videos-worth-keeping.git"
+  }
+}

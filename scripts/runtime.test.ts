@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
-const evaluate = (env, source) => JSON.parse(execFileSync(process.execPath, ['--input-type=module', '-e', `import {settings} from './scripts/runtime.mjs'; ${source}`], {env:{...process.env,...env},encoding:'utf8'}));
+const evaluate = (env: NodeJS.ProcessEnv, source: string) => JSON.parse(execFileSync(process.execPath, ['--import', 'tsx', '--input-type=module', '-e', `import {settings} from './scripts/runtime.ts'; ${source}`], {env:{...process.env,...env},encoding:'utf8'}));
 test('first run generates a private token and profile-specific paths in the selected data directory', () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(),'likes-config-'));
   try {

@@ -3,19 +3,19 @@ import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { parseEnv } from 'node:util';
 import { randomBytes } from 'node:crypto';
-import { settings, root } from './runtime.mjs';
-const git = args => execFileSync('git', args, { cwd: root });
+import { settings, root } from './runtime.ts';
+const git = (args: string[]) => execFileSync('git', args, { cwd: root });
 const { config, env, data } = settings();
 const needles = [randomBytes(32).toString('hex')];
 for (const file of [...fs.readdirSync(path.join(data, 'config')).filter(f => f.endsWith('.env')).map(f => path.join(data, 'config', f)), path.join(root, 'packages/backend/.env.local')]) {
   if (!fs.existsSync(file)) continue;
   for (const [key, val] of Object.entries(parseEnv(fs.readFileSync(file, 'utf8'))))
-    if (/PASSWORD|PASSWD|SECRET|TOKEN|API_KEY|PRIVATE/.test(key) && val.length >= 8) needles.push(val);
+    if (/PASSWORD|PASSWD|SECRET|TOKEN|API_KEY|PRIVATE/.test(key) && val && val.length >= 8) needles.push(val);
 }
 for (const file of [env.BILI_COOKIE_PATH, path.join(root, 'packages/backend/.cache/bili-cookies.json')]) {
   if (fs.existsSync(file)) for (const c of JSON.parse(fs.readFileSync(file, 'utf8'))) if (c.value?.length >= 16) needles.push(c.value);
 }
-const scan = blob => needles.some(n => blob.includes(Buffer.from(n)));
+const scan = (blob: Buffer) => needles.some(n => blob.includes(Buffer.from(n)));
 // Positive control uses an isolated index, never changes the user's staging area.
 fs.mkdirSync(path.join(root, '.data'), { recursive: true });
 const temporary = fs.mkdtempSync(path.join(root, '.data/secret-check-'));

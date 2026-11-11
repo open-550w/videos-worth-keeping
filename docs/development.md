@@ -1,5 +1,7 @@
 # 开发与测试
 
+项目维护的应用、运维和测试脚本统一使用 TypeScript，通过 `tsx` 执行。`scripts/` 也纳入 `pnpm typecheck`；无需安装 Python 或维护 Shell / JavaScript 脚本。Node.js、依赖包和前端构建产物仍使用 JavaScript 运行。
+
 pnpm workspace：`packages/web` 是 React 前端，`packages/backend` 是 Koa API，`packages/shared` 是共用的日期与 URL 逻辑。
 
 ```sh
@@ -23,3 +25,5 @@ pnpm stop
 ```
 
 提交前运行 `pnpm check-secrets`。真实环境配置、口令、Cookie、数据库、附件和日志不得进入版本管理。发布导出方法见 [发布流程](releasing.md)。
+
+服务管理入口是 `scripts/local/manage.ts`。macOS 通过 launchd 运行服务，其它 Unix 系统使用 Node detached 进程组。启动前检查端口归属，状态以 pgid 判断是否脱离会话；配置和运行环境文件只保存在私有数据目录。

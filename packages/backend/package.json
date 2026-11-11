@@ -5,13 +5,13 @@
   "type": "module",
   "main": "./src/index.ts",
   "scripts": {
-    "dev": "node ../../scripts/run.mjs dev",
-    "migrate": "node ../../scripts/run.mjs migrate",
-    "reset": "node ../../scripts/run.mjs reset",
-    "fetch:bili": "node ../../scripts/run.mjs fetch:bili",
-    "ping": "node ../../scripts/run.mjs ping",
+    "dev": "tsx ../../scripts/run.ts dev",
+    "migrate": "tsx ../../scripts/run.ts migrate",
+    "reset": "tsx ../../scripts/run.ts reset",
+    "fetch:bili": "tsx ../../scripts/run.ts fetch:bili",
+    "ping": "tsx ../../scripts/run.ts ping",
     "typecheck": "tsc --noEmit",
-    "backfill:bili-interactions": "node ../../scripts/run.mjs backfill:bili-interactions"
+    "backfill:bili-interactions": "tsx ../../scripts/run.ts backfill:bili-interactions"
   },
   "dependencies": {
     "@koa/cors": "^5.0.0",

@@ -24,7 +24,7 @@ let child: ReturnType<typeof spawn> | undefined;
 let logs = "";
 let assertions = 0;
 function check(value: unknown, message: string) { assert.ok(value, message); assertions++; }
-const env = {
+const env: NodeJS.ProcessEnv = {
   ...process.env, DB_CLIENT: engine, SQLITE_PATH: path.join(dir, "test.sqlite"),
   ACCESS_TOKEN: token, APP_DATA_DIR: dir, UPLOAD_DIR: path.join(dir, "uploads"),
   BILI_COOKIE_PATH: path.join(dir, "cookies.json"), BILI_CACHE_DIR: path.join(dir, "bili-detail"),
@@ -45,7 +45,7 @@ try {
   const reservation = net.createServer(); reservation.listen(0, "127.0.0.1"); await once(reservation, "listening");
   const port = (reservation.address() as net.AddressInfo).port;
   await new Promise<void>(r => reservation.close(() => r()));
-  child = spawn(process.execPath, ["node_modules/tsx/dist/cli.mjs", "packages/backend/src/index.ts"], { cwd: root, env: { ...env, PORT: String(port) }, stdio: ["ignore", "pipe", "pipe"] });
+  child = spawn(process.execPath, ["--import", "tsx", "packages/backend/src/index.ts"], { cwd: root, env: { ...env, PORT: String(port) }, stdio: ["ignore", "pipe", "pipe"] });
   child.stdout!.on("data", b => { logs += b; }); child.stderr!.on("data", b => { logs += b; });
   const base = `http://127.0.0.1:${port}`;
   for (let i = 0; i < 200; i++) {
@@ -64,7 +64,7 @@ try {
   const cookie = login.headers.get("set-cookie")!;
   check(login.status === 200 && /httponly/i.test(cookie) && /samesite=strict/i.test(cookie), "HttpOnly session");
   check((await fetch(base + "/api/health", { headers: { Cookie: cookie.split(";")[0] } })).status === 200, "cookie authenticates");
-  const smoke = spawn("python3", ["scripts/smoke/api.py"], { cwd: root, env: { ...env, SMOKE_BASE: base, SMOKE_TOKEN: token }, stdio: ["ignore", "pipe", "pipe"] });
+  const smoke = spawn(process.execPath, ["--import", "tsx", "scripts/smoke/api.ts"], { cwd: root, env: { ...env, SMOKE_BASE: base, SMOKE_TOKEN: token }, stdio: ["ignore", "pipe", "pipe"] });
   let output = ""; smoke.stdout.on("data", b => { output += b; }); smoke.stderr.on("data", b => { output += b; });
   const [code] = await once(smoke, "exit");
   assert.equal(code, 0, output);

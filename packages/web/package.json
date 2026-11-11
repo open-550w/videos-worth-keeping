@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "node ../../scripts/run.mjs web",
+    "dev": "tsx ../../scripts/run.ts web",
     "build": "vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit"

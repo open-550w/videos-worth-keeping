@@ -1,6 +1,6 @@
 # 开发与测试
 
-项目维护的应用、运维和测试脚本统一使用 TypeScript，通过 `tsx` 执行。`scripts/` 也纳入 `pnpm typecheck`；无需安装 Python 或维护 Shell / JavaScript 脚本。Node.js、依赖包和前端构建产物仍使用 JavaScript 运行。
+项目维护的应用、运维和测试脚本统一使用 TypeScript，通过 `tsx` 执行。`scripts/` 也纳入 `pnpm typecheck`；不再维护 Python、Shell 或 JavaScript 脚本。Node.js、依赖包和前端构建产物仍使用 JavaScript 运行。
 
 pnpm workspace：`packages/web` 是 React 前端，`packages/backend` 是 Koa API，`packages/shared` 是共用的日期与 URL 逻辑。
 
